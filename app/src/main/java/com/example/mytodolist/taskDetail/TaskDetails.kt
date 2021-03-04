@@ -1,13 +1,14 @@
-package com.example.mytodolist
+package com.example.mytodolist.taskDetail
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.mytodolist.R
 
 
-class AddTask : Fragment() {
+class TaskDetails : Fragment() {
 
 
     override fun onCreateView(
@@ -15,7 +16,8 @@ class AddTask : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.add_task, container, false)
+        return inflater.inflate(R.layout.fragment_task_details, container, false)
     }
+
 
 }

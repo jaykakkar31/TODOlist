@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/nav_tasks"
         tools:layout="@layout/fragment_task"
-        android:name="com.example.mytodolist.ui.TaskList.TaskListFragment"
+        android:name="com.example.mytodolist.ui.TaskList.TaskFragment"
         android:label="TaskListFragment" >
         <action
             android:id="@+id/action_taskListFragment_to_addTask"
@@ -16,11 +16,11 @@
     <fragment
         android:id="@+id/nav_statistics"
         tools:layout="@layout/fragment_statistics"
-        android:name="com.example.mytodolist.ui.home.StatisticsFragment"
+        android:name="com.example.mytodolist.ui.Statistics.StatisticsFragment"
         android:label="StatisticsFragment" />
     <fragment
         android:id="@+id/addTask"
         tools:layout="@layout/add_task"
-        android:name="com.example.mytodolist.AddTask"
+        android:name="com.example.mytodolist.addTask.AddTask"
         android:label="AddTask" />
 </navigation>

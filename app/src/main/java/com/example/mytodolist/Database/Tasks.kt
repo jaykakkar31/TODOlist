@@ -7,13 +7,13 @@ import androidx.room.PrimaryKey
 import java.lang.StringBuilder
 
 @Entity(tableName = "Tasks")
-data class Tasks(
+data class Tasks (
     @PrimaryKey(autoGenerate = true)
     var entryId:Long=0L,
     @ColumnInfo(name = "Title")
-    var title:String?=null,
+    var title:String="",
     @ColumnInfo(name = "Description")
-    var descp:String?=null,
+    var descp:String="",
     @ColumnInfo(name = "completed")
     var isCompleted:Boolean=false
 )

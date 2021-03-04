@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/clear_completed"
         android:orderInCategory="100"
         android:title="Clear completed"
         app:showAsAction="never" />
@@ -16,17 +16,7 @@
 
         android:icon="@drawable/ic_filter_list"
         android:title="filter" >
-        <menu>
-            <item
-                android:title="All"
-                android:id="@+id/all"/>
-            <item
-                android:title="Active"
-                android:id="@+id/active"/>
-            <item
-                android:title="Completed"
-                android:id="@+id/completed"/>
-        </menu>
+
     </item>
 
 

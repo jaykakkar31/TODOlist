@@ -2,16 +2,18 @@ package com.example.mytodolist.Database
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
 @Dao
 interface TODOListDao {
 
     @Query("SELECT * FROM Tasks")
-    suspend fun getAllTask():LiveData<List<Tasks>>
+     fun getAllTask():LiveData<List<Tasks>>
 
     @Query("SELECT *FROM Tasks WHERE entryId=:TaskId")
-    suspend fun getTaskById(TaskId:Long):LiveData<Tasks>
+     fun getTaskById(TaskId:Long):LiveData<Tasks>
 
     @Query("UPDATE Tasks SET completed = :completed WHERE entryId = :taskId")
     suspend fun updateCompleted(taskId: Long, completed: Boolean)
@@ -25,4 +27,6 @@ interface TODOListDao {
     @Query("DELETE FROM Tasks")
     suspend fun deleteTasks()
 
+    @Insert
+    suspend fun insertTask(task: Tasks)
 }

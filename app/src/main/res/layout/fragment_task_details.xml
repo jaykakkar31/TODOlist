@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".taskDetail.TaskDetails">
+
 
     <androidx.appcompat.widget.AppCompatCheckBox
         android:id="@+id/checkbox"
@@ -27,11 +27,19 @@
         android:paddingBottom="16dp"
         android:paddingEnd="16dp"
         android:text="Title"
+        android:textStyle="bold"
         android:textSize="20sp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/checkbox"
         app:layout_constraintEnd_toEndOf="parent"/>
-
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        android:text="Description"
+        android:textSize="18sp"
+        android:padding="16dp"
+app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/checkbox"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>
