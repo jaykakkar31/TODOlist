@@ -6,21 +6,49 @@
     app:startDestination="@id/nav_tasks">
     <fragment
         android:id="@+id/nav_tasks"
-        tools:layout="@layout/fragment_task"
         android:name="com.example.mytodolist.ui.TaskList.TaskFragment"
-        android:label="TaskListFragment" >
+        android:label="TaskListFragment"
+        tools:layout="@layout/fragment_task">
         <action
             android:id="@+id/action_taskListFragment_to_addTask"
             app:destination="@id/addTask" />
+        <action
+            android:id="@+id/action_nav_tasks_to_taskDetails"
+            app:destination="@id/taskDetails" />
+
     </fragment>
     <fragment
         android:id="@+id/nav_statistics"
-        tools:layout="@layout/fragment_statistics"
         android:name="com.example.mytodolist.ui.Statistics.StatisticsFragment"
-        android:label="StatisticsFragment" />
+        android:label="StatisticsFragment"
+        tools:layout="@layout/fragment_statistics" />
     <fragment
         android:id="@+id/addTask"
-        tools:layout="@layout/add_task"
         android:name="com.example.mytodolist.addTask.AddTask"
-        android:label="AddTask" />
+        android:label="{title}"
+        tools:layout="@layout/add_task">
+        <argument
+            android:name="TaskId"
+            app:argType="long" />
+        <argument
+            android:name="title"
+            app:argType="string"
+            />
+        <action
+            android:id="@+id/action_addTask_to_nav_tasks"
+            app:destination="@id/nav_tasks" />
+    </fragment>
+    <fragment
+        android:id="@+id/taskDetails"
+        android:name="com.example.mytodolist.taskDetail.TaskDetails"
+        android:label="fragment_task_details"
+        tools:layout="@layout/fragment_task_details">
+        <argument
+            android:name="TaskId"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_taskDetails_to_addTask"
+            app:destination="@id/addTask" />
+
+    </fragment>
 </navigation>

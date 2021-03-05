@@ -9,7 +9,7 @@ import java.lang.StringBuilder
 @Entity(tableName = "Tasks")
 data class Tasks (
     @PrimaryKey(autoGenerate = true)
-    var entryId:Long=0L,
+    var taskId:Long=0L,
     @ColumnInfo(name = "Title")
     var title:String="",
     @ColumnInfo(name = "Description")

@@ -83,7 +83,7 @@ class TaskViewModel(val dataSource: TODOListDao, application: Application) :
         Log.e(this.toString(), "Entery      22222222222222")
 
         viewModelScope.launch {
-            result.value = filterItems(currentFiltering)
+//            result.value = filterItems(currentFiltering)
         }
 
     }
@@ -112,31 +112,31 @@ class TaskViewModel(val dataSource: TODOListDao, application: Application) :
     }
 
 
-    private fun filterItems(filteringType: TasksFilterType): List<Tasks> {
-        Log.e(this.toString(), "#########11111111111111$filteringType")
-        try {
-            Transformations.map(taskData) {
-                Log.e(this.toString(), "#########$it")
-                for (task in it) {
-                    when (filteringType) {
-                        TasksFilterType.ALL_TASKS -> tasksToShow.add(task)
-                        TasksFilterType.ACTIVE_TASKS -> if (!task.isCompleted) {
-                            tasksToShow.add(task)
-                        }
-                        TasksFilterType.COMPLETED_TASKS -> if (task.isCompleted) {
-                            tasksToShow.add(task)
-                        }
-                    }
-                }
-            }
-        } catch (io: Exception) {
-            Log.e(this.toString(), "Exception")
-
-        }
-        // We filter the tasks based on the requestType
-
-        return tasksToShow
-    }
+//    private fun filterItems(filteringType: TasksFilterType): List<Tasks> {
+//        Log.e(this.toString(), "#########11111111111111$filteringType")
+//        try {
+//            Transformations.map(taskData) {
+//                Log.e(this.toString(), "#########$it")
+//                for (task in it) {
+//                    when (filteringType) {
+//                        TasksFilterType.ALL_TASKS -> tasksToShow.add(task)
+//                        TasksFilterType.ACTIVE_TASKS -> if (!task.isCompleted) {
+//                            tasksToShow.add(task)
+//                        }
+//                        TasksFilterType.COMPLETED_TASKS -> if (task.isCompleted) {
+//                            tasksToShow.add(task)
+//                        }
+//                    }
+//                }
+//            }
+//        } catch (io: Exception) {
+//            Log.e(this.toString(), "Exception")
+//
+//        }
+//        // We filter the tasks based on the requestType
+//
+//        return tasksToShow
+//    }
 }
 
 

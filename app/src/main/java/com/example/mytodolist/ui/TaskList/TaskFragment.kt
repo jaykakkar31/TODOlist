@@ -17,7 +17,7 @@ import com.google.android.material.snackbar.Snackbar
 class TaskFragment : Fragment() {
     private lateinit var viewModel: TaskViewModel
     private lateinit var binding: FragmentTaskBinding
-    var adapter: TaskAdapter = TaskAdapter()
+    lateinit var adapter: TaskAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,32 +37,32 @@ class TaskFragment : Fragment() {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_task, container, false)
         binding.fabAdd.setOnClickListener {
-            findNavController().navigate(R.id.action_taskListFragment_to_addTask)
+            findNavController().navigate(TaskFragmentDirections.actionTaskListFragmentToAddTask(0L,"Add Task"))
         }
-        viewModel.taskData.observe(this, Observer {
-//            adapter.data = it
-adapter.submitList(it)
+        adapter=TaskAdapter(TaskAdapter.Clicklisteners{
+            findNavController().navigate(TaskFragmentDirections.actionNavTasksToTaskDetails(it))
         })
 
-        viewModel._snackbarMessage.observe(this, Observer {
-            Snackbar.make(requireView(),it,Snackbar.LENGTH_SHORT).show()
+
+
+
+
+        viewModel.taskData.observe(viewLifecycleOwner, Observer {
+            Log.e(this.toString(),"##############$it")
+//            adapter.data = it
+            adapter.submitList(it)
         })
+
+        viewModel._snackbarMessage.observe(viewLifecycleOwner, Observer {
+            Snackbar.make(requireView(), it, Snackbar.LENGTH_SHORT).show()
+        })
+
+
 
         binding.recycler.adapter = adapter
-        viewModel._currentFilteringLabel.observe(this, Observer {
+        viewModel._currentFilteringLabel.observe(viewLifecycleOwner, Observer {
             binding.tasksType.text = it
-            try {
 
-                viewModel.filterTasks()
-            } finally {
-                viewModel._result.observe(this, Observer {
-                    Log.e(this.toString(), "Entery   777777777773${it.forEach { 
-                        it.title.toString()
-                    }}")
-
-                    adapter.data=it
-                })
-            }
         })
         setHasOptionsMenu(true)
         binding.lifecycleOwner = this
