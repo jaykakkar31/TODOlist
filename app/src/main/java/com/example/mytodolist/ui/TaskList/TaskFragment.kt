@@ -15,7 +15,7 @@ import com.example.mytodolist.databinding.FragmentTaskBinding
 import com.google.android.material.snackbar.Snackbar
 
 class TaskFragment : Fragment() {
-    private lateinit var viewModel: TaskViewModel
+    lateinit var viewModel: TaskViewModel
     private lateinit var binding: FragmentTaskBinding
     lateinit var adapter: TaskAdapter
 
@@ -32,25 +32,33 @@ class TaskFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_task, container, false)
         binding.fabAdd.setOnClickListener {
-            findNavController().navigate(TaskFragmentDirections.actionTaskListFragmentToAddTask(0L,"Add Task"))
+            findNavController().navigate(
+                TaskFragmentDirections.actionTaskListFragmentToAddTask(
+                    0L,
+                    "Add Task"
+                )
+            )
         }
-        adapter=TaskAdapter(TaskAdapter.Clicklisteners{
+        adapter = TaskAdapter(TaskAdapter.Clicklisteners{
             findNavController().navigate(TaskFragmentDirections.actionNavTasksToTaskDetails(it))
+        },TaskAdapter.ListenerTask{id, isCompleted ->
+            viewModel.updateCompleted(isCompleted,id)
+            adapter.notifyDataSetChanged()
         })
 
 
 
 
-
         viewModel.taskData.observe(viewLifecycleOwner, Observer {
-            Log.e(this.toString(),"##############$it")
+            Log.e(this.toString(), "##############$it")
 //            adapter.data = it
             adapter.submitList(it)
+            adapter.notifyDataSetChanged()
         })
 
         viewModel._snackbarMessage.observe(viewLifecycleOwner, Observer {

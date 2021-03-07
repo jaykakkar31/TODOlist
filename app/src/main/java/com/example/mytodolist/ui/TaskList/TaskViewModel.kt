@@ -4,10 +4,12 @@ import android.app.Application
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.lifecycle.*
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.mytodolist.Database.TODOListDao
 import com.example.mytodolist.Database.Tasks
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -25,6 +27,19 @@ class TaskViewModel(val dataSource: TODOListDao, application: Application) :
         get() = noTaskLabel
 
     var taskData = dataSource.getAllTask()
+
+    fun updateCompleted(isCompleted:Boolean,taskId:Long) {
+        viewModelScope.launch {
+            updateTaskCompleted(isCompleted,taskId)
+        }
+
+    }
+
+    private suspend fun updateTaskCompleted(isCompleted: Boolean, taskId: Long) {
+        withContext(Dispatchers.IO){
+            dataSource.updateCompletedTasks(isCompleted,taskId)
+        }
+    }
 
 
     fun clearCompletedTasks() {
@@ -94,21 +109,21 @@ class TaskViewModel(val dataSource: TODOListDao, application: Application) :
     val _isDataLoadError: LiveData<Boolean>
         get() = isDataLoadError
 
-    fun completedTask(task:Tasks,completed:Boolean){
-        if(completed){
+    fun completedTask(task: Tasks, completed: Boolean) {
+        if (completed) {
             showSnackbarMessage("Task marked is completed")
 
-        }
-        else{
+        } else {
             showSnackbarMessage("Task marked is active")
         }
     }
-    var snackbarMessage=MutableLiveData<String>()
-    val _snackbarMessage:LiveData<String>
-    get() = snackbarMessage
+
+    var snackbarMessage = MutableLiveData<String>()
+    val _snackbarMessage: LiveData<String>
+        get() = snackbarMessage
 
     private fun showSnackbarMessage(taskComplete: String) {
-        snackbarMessage.value=taskComplete
+        snackbarMessage.value = taskComplete
     }
 
 

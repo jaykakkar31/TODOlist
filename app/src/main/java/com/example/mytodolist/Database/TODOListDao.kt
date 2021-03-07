@@ -35,5 +35,8 @@ interface TODOListDao {
         titleTask: String,
         taskDescription: String,
         mtaskId: Long
+
     )
+    @Query("UPDATE Tasks SET completed=:isCompleted WHERE taskId=:taskId")
+    suspend fun updateCompletedTasks(isCompleted:Boolean,taskId: Long)
 }

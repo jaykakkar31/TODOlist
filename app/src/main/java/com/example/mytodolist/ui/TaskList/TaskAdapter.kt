@@ -11,20 +11,35 @@ import com.example.mytodolist.Database.Tasks
 import com.example.mytodolist.databinding.TaskListBinding
 
 
-class TaskAdapter(val Clicklistener: Clicklisteners) :
+class TaskAdapter(val Clicklistener: Clicklisteners, val listenerTask: ListenerTask) :
     ListAdapter<Tasks, TaskAdapter.ViewHolder>(TaksDiffUtilCallBack()) {
+
+
 //    var data = listOf<Tasks>()
 //        set(value) {
 //            field = value
 //            notifyDataSetChanged()
 //        }
 
-    class ViewHolder(var binding: TaskListBinding) : RecyclerView.ViewHolder(binding.root) {
+
+    class ListenerTask(val listener: (id: Long, isCompleted: Boolean) -> Unit) {
+
+
+
+        fun OnClickCheckBox(tasks: Tasks, complete: Boolean) {
+            listener(tasks.taskId, complete)
+
+        }
+    }
+
+    class ViewHolder(var binding: TaskListBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         var title = binding.title
         var checkbox = binding.checkbox
-
+        var taskFragment = TaskFragment()
         fun bind(item: Tasks) {
             title.text = item.title
+            checkbox.isChecked=item.isCompleted
         }
 
         companion object {
@@ -48,11 +63,14 @@ class TaskAdapter(val Clicklistener: Clicklisteners) :
         val item = getItem(position)
         holder.checkbox.setOnClickListener {
             if (holder.checkbox.isChecked) {
+//                Clicklistener.onCheck(item, true)
+                listenerTask.OnClickCheckBox(item, true)
                 Log.e(it.context.toString(), "!!!!!!!!!!!!!!!${holder.checkbox.isChecked}")
                 Toast.makeText(it.context, "Task has been marked completed", Toast.LENGTH_SHORT)
                     .show()
 
             } else {
+                listenerTask.OnClickCheckBox(item, false)
                 Toast.makeText(it.context, "Task has been active", Toast.LENGTH_SHORT).show()
             }
         }
@@ -60,12 +78,14 @@ class TaskAdapter(val Clicklistener: Clicklisteners) :
 
         holder.title.setOnClickListener {
             Clicklistener.onClick(item)
+//            Clicklistener.clickListener(item.taskId)
         }
         holder.bind(item)
     }
 
 
-    class Clicklisteners(val clickListener: (id: Long) -> Unit) {
+    class Clicklisteners(var clickListener: (id: Long) -> Unit) {
+
         fun onClick(tasks: Tasks) {
             clickListener(tasks.taskId)
         }
