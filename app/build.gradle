@@ -66,7 +66,18 @@ dependencies {
     // optional - Test helpers
     testImplementation "androidx.room:room-testing:$room_version"
 
+    def androidXTestExtKotlinRunnerVersion = '1.1.1'
+    def espressoVersion = '3.2.0-beta01'
 
+    // AndroidX Test - Instrumented testing
+    androidTestImplementation "androidx.test.ext:junit:$androidXTestExtKotlinRunnerVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
+    def androidXTestCoreVersion = '1.2.0'
 
+// AndroidX Test - JVM testing
+    //noinspection GradleDependency
+    testImplementation "androidx.test.ext:junit-ktx:$androidXTestExtKotlinRunnerVersion"
 
+    //noinspection GradleDependency
+    testImplementation "androidx.test:core-ktx:$androidXTestCoreVersion"
 }

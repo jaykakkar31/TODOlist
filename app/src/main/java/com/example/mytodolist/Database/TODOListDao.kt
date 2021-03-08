@@ -21,7 +21,7 @@ interface TODOListDao {
     suspend fun deleteTaskById(taskId: Long): Int
 
     @Query("DELETE FROM Tasks WHERE completed = 1")
-    suspend fun deleteCompletedTasks(): Int
+     fun deleteCompletedTasks(): Int
 
     @Query("DELETE FROM Tasks")
     suspend fun deleteTasks()

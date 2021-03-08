@@ -1,13 +1,16 @@
 package com.example.mytodolist.ui.Statistics
 
+import android.app.Application
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import com.example.mytodolist.Database.TODOListDao
 
-class StatisticsViewModel : ViewModel() {
+class StatisticsViewModel(val dataSource: TODOListDao, application: Application) : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
-    }
-    val text: LiveData<String> = _text
+    var data = dataSource.getAllTask()
+
+
 }

@@ -1,13 +1,10 @@
 package com.example.mytodolist.ui.TaskList
 
+
 import android.app.Application
 import android.util.Log
-import android.view.View
-import android.widget.Toast
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.annotation.DrawableRes
+import androidx.lifecycle.*
 import com.example.mytodolist.Database.TODOListDao
 import com.example.mytodolist.Database.Tasks
 import kotlinx.coroutines.Dispatchers
@@ -18,6 +15,9 @@ class TaskViewModel(val dataSource: TODOListDao, application: Application) :
     AndroidViewModel(application) {
     private lateinit var currentFiltering: TasksFilterType
 
+    var currentIcon=MutableLiveData<TasksFilterType>()
+    val _currentIcon:LiveData<TasksFilterType>
+    get() = currentIcon
 
     private val currentFilteringLabel = MutableLiveData<String>()
     val _currentFilteringLabel: LiveData<String> = currentFilteringLabel
@@ -26,18 +26,19 @@ class TaskViewModel(val dataSource: TODOListDao, application: Application) :
     val _noTaskLabel: LiveData<String>
         get() = noTaskLabel
 
+    //get all the data
     var taskData = dataSource.getAllTask()
 
-    fun updateCompleted(isCompleted:Boolean,taskId:Long) {
+    fun updateCompleted(isCompleted: Boolean, taskId: Long) {
         viewModelScope.launch {
-            updateTaskCompleted(isCompleted,taskId)
+            updateTaskCompleted(isCompleted, taskId)
         }
 
     }
 
     private suspend fun updateTaskCompleted(isCompleted: Boolean, taskId: Long) {
-        withContext(Dispatchers.IO){
-            dataSource.updateCompletedTasks(isCompleted,taskId)
+        withContext(Dispatchers.IO) {
+            dataSource.updateCompletedTasks(isCompleted, taskId)
         }
     }
 
@@ -67,8 +68,7 @@ class TaskViewModel(val dataSource: TODOListDao, application: Application) :
             }
             TasksFilterType.ACTIVE_TASKS -> {
                 setFilter(
-                    "Active Task", "You have no active task"
-                )
+                    "Active Task", "You have no active task"                )
             }
             TasksFilterType.COMPLETED_TASKS -> {
                 setFilter(
@@ -90,20 +90,17 @@ class TaskViewModel(val dataSource: TODOListDao, application: Application) :
 
         noTaskLabel.value = noTasksLabel
 
-
-    }
-
-
-    fun filterTasks() {
-        Log.e(this.toString(), "Entery      22222222222222")
-
         viewModelScope.launch {
-//            result.value = filterItems(currentFiltering)
+            result.value = filterItems(currentFiltering)
+            Log.e(this.toString(), "Entery      22222222222222${result.value}")
+
         }
 
     }
 
+
     var tasksToShow = ArrayList<Tasks>()
+
 
     var isDataLoadError = MutableLiveData<Boolean>()
     val _isDataLoadError: LiveData<Boolean>
@@ -127,31 +124,37 @@ class TaskViewModel(val dataSource: TODOListDao, application: Application) :
     }
 
 
-//    private fun filterItems(filteringType: TasksFilterType): List<Tasks> {
-//        Log.e(this.toString(), "#########11111111111111$filteringType")
-//        try {
+    private fun filterItems(filteringType: TasksFilterType): List<Tasks> {
+        Log.e(this.toString(), "#########11111111111111$filteringType")
+        tasksToShow.clear()
+        try {
 //            Transformations.map(taskData) {
-//                Log.e(this.toString(), "#########$it")
-//                for (task in it) {
-//                    when (filteringType) {
-//                        TasksFilterType.ALL_TASKS -> tasksToShow.add(task)
-//                        TasksFilterType.ACTIVE_TASKS -> if (!task.isCompleted) {
-//                            tasksToShow.add(task)
-//                        }
-//                        TasksFilterType.COMPLETED_TASKS -> if (task.isCompleted) {
-//                            tasksToShow.add(task)
-//                        }
-//                    }
+            taskData.value?.forEach {
+                Log.e(this.toString(), "#########$it")
+
+                when (filteringType) {
+                    TasksFilterType.ALL_TASKS -> tasksToShow.add(it)
+                    TasksFilterType.ACTIVE_TASKS -> if (!it.isCompleted) {
+                        tasksToShow.add(it)
+                    }
+                    TasksFilterType.COMPLETED_TASKS -> if (it.isCompleted) {
+                        tasksToShow.add(it)
+                    }
+
+                }
+                Log.e(this.toString(), "eeeeeeeeeee$tasksToShow")
+
+
 //                }
-//            }
-//        } catch (io: Exception) {
-//            Log.e(this.toString(), "Exception")
-//
-//        }
-//        // We filter the tasks based on the requestType
-//
-//        return tasksToShow
-//    }
+            }
+        } catch (io: Exception) {
+            Log.e(this.toString(), "Exception")
+
+        }
+        // We filter the tasks based on the requestType
+
+        return tasksToShow
+    }
 }
 
 

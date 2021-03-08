@@ -16,4 +16,6 @@ data class Tasks (
     var descp:String="",
     @ColumnInfo(name = "completed")
     var isCompleted:Boolean=false
-)
+) {
+
+}

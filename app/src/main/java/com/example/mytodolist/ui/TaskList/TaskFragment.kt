@@ -9,10 +9,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.example.mytodolist.Database.Tasks
 import com.example.mytodolist.Database.TasksDatabase
 import com.example.mytodolist.R
 import com.example.mytodolist.databinding.FragmentTaskBinding
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 
 class TaskFragment : Fragment() {
     lateinit var viewModel: TaskViewModel
@@ -57,8 +61,15 @@ class TaskFragment : Fragment() {
         viewModel.taskData.observe(viewLifecycleOwner, Observer {
             Log.e(this.toString(), "##############$it")
 //            adapter.data = it
+//            displayTask(it)
             adapter.submitList(it)
             adapter.notifyDataSetChanged()
+            if(it.isEmpty()){
+
+                displayTask()
+
+            }
+
         })
 
         viewModel._snackbarMessage.observe(viewLifecycleOwner, Observer {
@@ -75,6 +86,13 @@ class TaskFragment : Fragment() {
         setHasOptionsMenu(true)
         binding.lifecycleOwner = this
         return binding.root
+    }
+
+    private  fun displayTask() {
+        binding.tasksType.visibility=View.INVISIBLE
+        binding.noTasksIcon.visibility=View.VISIBLE
+        binding.noTasksText.visibility=View.VISIBLE
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -109,12 +127,35 @@ class TaskFragment : Fragment() {
             setOnMenuItemClickListener {
                 viewModel.setFiltering(
                     when (it.itemId) {
-                        R.id.active -> TasksFilterType.ACTIVE_TASKS
+                        R.id.active -> {TasksFilterType.ACTIVE_TASKS
+
+                        }
                         R.id.completed -> TasksFilterType.COMPLETED_TASKS
                         else -> TasksFilterType.ALL_TASKS
                     }
-
                 )
+                viewModel._result.observe(viewLifecycleOwner, Observer { it ->
+                    Log.e(this.toString(),"MMMMMMMMMMMM$it")
+                    if(it.isEmpty()){
+                        viewModel._noTaskLabel.observe(viewLifecycleOwner, Observer { notask->
+                            binding.noTasksText.text=notask
+                            binding.noTasksText.visibility=View.VISIBLE
+                            binding.noTasksIcon.visibility=View.VISIBLE
+                            binding.tasksType.visibility=View.INVISIBLE
+
+                        })
+
+                    }
+                    else{
+                        binding.noTasksText.visibility=View.GONE
+                        binding.noTasksIcon.visibility=View.GONE
+                        binding.tasksType.visibility=View.VISIBLE
+
+                    }
+                    adapter.submitList(it)
+                    adapter.notifyDataSetChanged()
+
+                })
 
 
                 true
